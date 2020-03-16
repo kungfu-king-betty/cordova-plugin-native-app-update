@@ -45,7 +45,7 @@ public class CDVAppUpdate extends CordovaPlugin {
     }
 
     @TargetApi(21)
-    private boolean needsUpdate(final CallbackContext callbackContext) throws JSONException {
+    private void needsUpdate(final CallbackContext callbackContext) throws JSONException {
         // Get the app context
         Context this_ctx = (Context) this.cordova.getActivity();
         // Creates instance of the manager.
