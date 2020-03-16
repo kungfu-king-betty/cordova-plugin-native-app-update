@@ -10,7 +10,7 @@ import org.apache.cordova.PluginResult;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import com.google.android.play.core.tasks.Task<ResultT>;
+import com.google.android.play.core.tasks.Task;
 
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -54,19 +54,22 @@ public class CDVAppUpdate extends CordovaPlugin {
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
         // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-            boolean update_avail = false;
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                update_avail = true;
-            }
-                  // For a flexible update, use AppUpdateType.FLEXIBLE
-                  // && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                      // Request the update.
-            // }
+        appUpdateInfoTask.addOnSuccessListener(new Runnable(appUpdateInfo) {
+            @Override
+            public void run() {
+                boolean update_avail = false;
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    update_avail = true;
+                }
+                      // For a flexible update, use AppUpdateType.FLEXIBLE
+                      // && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                          // Request the update.
+                // }
 
-            PluginResult result = new PluginResult(PluginResult.Status.OK, update_avail);
-            result.setKeepCallback(true);
-            callbackContext.sendPluginResult(result);
+                PluginResult result = new PluginResult(PluginResult.Status.OK, update_avail);
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+            }
         });
     }
 }
