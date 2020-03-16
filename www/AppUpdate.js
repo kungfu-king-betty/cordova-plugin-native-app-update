@@ -35,4 +35,4 @@ var AppUpdate = {
     }
 };
 
-module.exports = StatusBar;
+module.exports = AppUpdate;
