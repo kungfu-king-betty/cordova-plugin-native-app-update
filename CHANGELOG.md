@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.10] &mdash; 2020-03-16
+- [Fixed] The error handler in the android source file to print the stack trace of the error
+
 ## [0.0.9] &mdash; 2020-03-16
 - [Added] More info to the error handler in the android source file
 

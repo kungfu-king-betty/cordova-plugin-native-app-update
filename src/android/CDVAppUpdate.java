@@ -1,5 +1,7 @@
 package com.kungfukingbetty.cordova.appupdate;
 
+import java.io.StringWriter;
+import java.io.PrintWriter;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -59,9 +61,12 @@ public class CDVAppUpdate extends CordovaPlugin {
                     try {
                         needsUpdate();
                     } catch (Exception ignore) {
-                        Log.e(TAG, ignore);
+                        StringWriter sw = new StringWriter();
+                        PrintWriter pw = new PrintWriter(sw);
+                        ignore.printStackTrace(pw);
+                        Log.e(TAG, sw.toString());
                         mPluginResult = new PluginResult(PluginResult.Status.ERROR);
-                        mCallbackContext.error(errorResponse.put("message", ignore));
+                        mCallbackContext.error(errorResponse.put("message", sw.toString()));
                         mCallbackContext.sendPluginResult(mPluginResult);
                     }
                 }
@@ -99,10 +104,13 @@ public class CDVAppUpdate extends CordovaPlugin {
         });
 
         appUpdateInfoTask.addOnFailureListener(taskError -> {
-            Log.e(TAG, taskError.printStackTrace());
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            taskError.printStackTrace(pw);
+            Log.e(TAG, sw.toString());
             final JSONObject taskErrorResponse = new JSONObject();
             mPluginResult = new PluginResult(PluginResult.Status.ERROR);
-            mCallbackContext.error(taskErrorResponse.put("message", taskError));
+            mCallbackContext.error(taskErrorResponse.put("message", sw.toString()));
             mCallbackContext.sendPluginResult(mPluginResult);
         });
     }
