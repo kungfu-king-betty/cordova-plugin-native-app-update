@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -55,22 +58,19 @@ public class CDVAppUpdate extends CordovaPlugin {
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
         // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener(new Runnable(appUpdateInfo) {
-            @Override
-            public void run() {
-                boolean update_avail = false;
-                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                    update_avail = true;
-                }
-                      // For a flexible update, use AppUpdateType.FLEXIBLE
-                      // && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                          // Request the update.
-                // }
-
-                PluginResult result = new PluginResult(PluginResult.Status.OK, update_avail);
-                result.setKeepCallback(true);
-                callbackContext.sendPluginResult(result);
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            boolean update_avail = false;
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                update_avail = true;
             }
+                  // For a flexible update, use AppUpdateType.FLEXIBLE
+                  // && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                      // Request the update.
+            // }
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK, update_avail);
+            result.setKeepCallback(true);
+            callbackContext.sendPluginResult(result);
         });
     }
 }
