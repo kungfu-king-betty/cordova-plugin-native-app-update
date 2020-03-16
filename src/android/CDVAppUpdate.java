@@ -22,6 +22,8 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 
 public class CDVAppUpdate extends CordovaPlugin {
 
+    private CallbackContext updateCallbackContext = null;
+
     protected void pluginInitialize(final CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
     }
@@ -32,7 +34,8 @@ public class CDVAppUpdate extends CordovaPlugin {
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     try {
-                        needsUpdate(callbackContext);
+                        updateCallbackContext = callbackContext;
+                        needsUpdate();
                     } catch (Exception ignore) {
                         System.out.println("AppUpdate Error:" + ignore);
                     }
@@ -45,7 +48,7 @@ public class CDVAppUpdate extends CordovaPlugin {
     }
 
     @TargetApi(21)
-    private void needsUpdate(final CallbackContext callbackContext) throws JSONException {
+    private void needsUpdate() throws JSONException {
         // Get the app context
         Context this_ctx = (Context) this.cordova.getActivity();
         // Creates instance of the manager.
@@ -67,7 +70,7 @@ public class CDVAppUpdate extends CordovaPlugin {
 
             PluginResult result = new PluginResult(PluginResult.Status.OK, update_avail);
             result.setKeepCallback(true);
-            callbackContext.sendPluginResult(result);
+            updateCallbackContext.sendPluginResult(result);
         });
     }
 }
