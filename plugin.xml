@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-native-app-update"
+    version="0.0.1">
+    <name>CDVAppUpdate</name>
+    <description>Cordova Native App Update Plugin</description>
+    <license>MIT</license>
+    <repo>https://github.com/kungfu-king-betty/cordova-plugin-native-app-update</repo>
+    <issue>https://github.com/kungfu-king-betty/cordova-plugin-native-app-update/issues</issue>
+    <keywords>phonegap,cordova,native,app update</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=7.1.0" />
+        <engine name="cordova-android" version=">=6.4.0"/>
+        <engine name="cordova-ios" version=">=4.4.0"/>
+    </engines>
+
+    <js-module src="www/AppUpdate.js" name="AppUpdate">
+        <clobbers target="window.AppUpdate" />
+    </js-module>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="AppUpdate">
+                <param name="ios-package" value="CDVBackgroundFetch"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVAppUpdate.h" />
+        <source-file src="src/ios/CDVAppUpdate.m" />
+    </platform>
+
+    <platform name="android">
+        <source-file src="src/android/CDVAppUpdate.java" target-dir="src/com/apache/cordova/appupdate" />
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AppUpdate">
+                <param name="android-package" value="org.apache.cordova.appupdate.CDVAppUpdate"/>
+            </feature>
+        </config-file>
+    </platform>
+</plugin>
