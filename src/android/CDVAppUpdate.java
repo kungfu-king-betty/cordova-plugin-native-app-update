@@ -22,12 +22,10 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 
 public class CDVAppUpdate extends CordovaPlugin {
 
-    @Override
     protected void pluginInitialize(final CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
     }
 
-    @Override
     public boolean execute(final String action, final CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
         boolean result = false;
         if ("needsupdate".equalsIgnoreCase(action)) {
