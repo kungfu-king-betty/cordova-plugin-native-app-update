@@ -32,7 +32,6 @@ public class CDVAppUpdate extends CordovaPlugin {
         boolean result = false;
         if ("needsupdate".equalsIgnoreCase(action)) {
             this.cordova.getActivity().runOnUiThread(new Runnable() {
-                @Override
                 public void run() {
                     try {
                         needsUpdate(callbackContext);
