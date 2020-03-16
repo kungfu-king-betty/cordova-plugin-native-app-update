@@ -3,7 +3,7 @@
 //
 //  Created by Austen Zeh <developerDawg@gmail.com> on 2020-03-16
 //
-#import "CDVBackgroundFetch.h"
+#import "CDVAppUpdate.h"
 #import "AppDelegate.h"
 
 static NSString *const TAG = @"CDVAppUpdate";
@@ -21,7 +21,7 @@ static NSString *const TAG = @"CDVAppUpdate";
     NSData* data = [NSData dataWithContentsOfURL:url];
     NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     BOOL update_avail = NO;
-    
+
     NSLog(@"%@ Checking for app update", TAG);
     if ([lookup[@"resultCount"] integerValue] == 1) {
         NSString* appStoreVersion = lookup[@"results"][0][@"version"];
@@ -34,7 +34,7 @@ static NSString *const TAG = @"CDVAppUpdate";
 
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:update_avail];
     [result setKeepCallbackAsBool:YES];
-    [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 @end

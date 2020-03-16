@@ -5,7 +5,9 @@
 #import <Cordova/CDVPlugin.h>
 #import "AppDelegate.h"
 
-@interface CDVBackgroundFetch : CDVPlugin
+@interface CDVAppUpdate : CDVPlugin {}
+
 - (BOOL) needsUpdate:(CDVInvokedUrlCommand*)command;
+
 @end
 
