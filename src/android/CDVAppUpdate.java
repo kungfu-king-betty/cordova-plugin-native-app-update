@@ -59,6 +59,7 @@ public class CDVAppUpdate extends CordovaPlugin {
                     try {
                         needsUpdate();
                     } catch (Exception ignore) {
+                        Log.e(TAG, ignore);
                         mPluginResult = new PluginResult(PluginResult.Status.ERROR);
                         mCallbackContext.error(errorResponse.put("message", ignore));
                         mCallbackContext.sendPluginResult(mPluginResult);
@@ -98,6 +99,7 @@ public class CDVAppUpdate extends CordovaPlugin {
         });
 
         appUpdateInfoTask.addOnFailureListener(taskError -> {
+            Log.e(TAG, taskError.printStackTrace());
             final JSONObject taskErrorResponse = new JSONObject();
             mPluginResult = new PluginResult(PluginResult.Status.ERROR);
             mCallbackContext.error(taskErrorResponse.put("message", taskError));

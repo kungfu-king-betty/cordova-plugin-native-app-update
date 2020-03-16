@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.9] &mdash; 2020-03-16
+- [Added] More info to the error handler in the android source file
+
 ## [0.0.8] &mdash; 2020-03-16
 - [Fixed] Issues in the android source file that was causing nothing to be returned from the method
 - [Fixed] The package name used in the plugin declaration that was causing an error during the class initialization
