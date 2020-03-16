@@ -9,7 +9,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
 import android.annotation.TargetApi;
-
+import android.content.Context;
 import com.google.android.play.core.tasks.Task<ResultT>;
 
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -19,21 +19,36 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 public class CDVAppUpdate extends CordovaPlugin {
 
     @Override
-    protected void pluginInitialize() { }
+    protected void pluginInitialize(final CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+    }
 
-    public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
+    @Override
+    public boolean execute(final String action, final CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
         boolean result = false;
-        if (action.equalsIgnoreCase('needsupdate')) {
-            result = true;
-            needsUpdate(data.getJSONObject(0), callbackContext);
+        if ("needsupdate".equalsIgnoreCase(action)) {
+            this.cordova.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        needsUpdate(callbackContext);
+                    } catch (Exception ignore) {
+                        System.out.println("AppUpdate Error:" + ignore);
+                    }
+                }
+            });
+            return true;
         }
-        return result;
+
+        return false;
     }
 
     @TargetApi(21)
-    private boolean needsUpdate(JSONObject options, final CallbackContext callbackContext) throws JSONException {
+    private boolean needsUpdate(final CallbackContext callbackContext) throws JSONException {
+        // Get the app context
+        Context this_ctx = (Context) this.cordova.getActivity();
         // Creates instance of the manager.
-        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(context);
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this_ctx);
 
         // Returns an intent object that you use to check for an update.
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();

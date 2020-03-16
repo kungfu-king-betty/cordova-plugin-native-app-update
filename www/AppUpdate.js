@@ -24,14 +24,15 @@ var exec = require("cordova/exec");
 
 var EMPTY_FN = function() {}
 
-var MODULE = "AppUpdate";
-module.exports = {
-    needsUpdate: function(appId=null, success, failure) {
+var AppUpdate = {
+    needsUpdate: function(success, failure) {
         // if (typeof(taskId) !== 'string') {
         //     throw "AppUpdate.needsUpdate now requires an appId string as the first argument";
         // }
         success = success || EMPTY_FN;
         failure = failure || EMPTY_FN;
-        exec(success, failure, MODULE, 'needsUpdate',[appId]);
+        exec(success, failure, "AppUpdate", "needsUpdate",[]);
     }
 };
+
+module.exports = StatusBar;
