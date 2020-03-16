@@ -72,5 +72,11 @@ public class CDVAppUpdate extends CordovaPlugin {
             result.setKeepCallback(true);
             updateCallbackContext.sendPluginResult(result);
         });
+
+        appUpdateInfoTask.addOnFailureListener(taskError -> {
+            PluginResult result = new PluginResult(PluginResult.Status.ERROR, taskError);
+            result.setKeepCallback(true);
+            updateCallbackContext.sendPluginResult(result);
+        });
     }
 }
