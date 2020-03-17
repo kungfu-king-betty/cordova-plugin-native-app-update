@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.2.2] &mdash; 2020-03-17
+- [Removed] compileOptions from build.gradle file for Android plugin
+
 ## [0.2.1] &mdash; 2020-03-17
 - [Updated] build.grable for android plugin
 

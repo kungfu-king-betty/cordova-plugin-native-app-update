@@ -35,6 +35,13 @@ This plugin is defined as native because the app information is pulled right fro
 
 - This plugin only works for devices that target API 21 or higher
 - This plugin does not work with device emulators, only real devices that have a google account logged in through the Google Play Store.
+- Make sure you are using Java 1.8 or greater. In your build.gradle file look for *compileOptions* and verify your version matches or is greater than what is shown below:
+```
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+```
 
 ## Using the plugin ##
 
