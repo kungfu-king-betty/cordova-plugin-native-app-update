@@ -12,11 +12,13 @@ This plugin is defined as native because the app information is pulled right fro
 :new: App Update now provides a [__`needsUpdate`__](#example) method to check if an update is available in the OS store.
 
 ### iOS
+
 - Currently for iOS devices, the plugin **checks the version number, not the build number**, so if you release multiple builds within the same version, then this plugin will not handle these updates properly. (ex. 1.0.0 != 1.0.1)
 - This plugin may be updated in the future to handle multiple builds within the same version, but seeing as Apple requires a new version number for new releases this may not be needed at all.
 - [__`needsUpdate`__](#example) will return either true or false when successful.
 
 ### Android
+
 - The plugin uses Android's [**in-app updates functionality**](https://developer.android.com/guide/playcore/in-app-updates) to detect when an update is available
 - This functionality by default checks the build number and not the version number, so you must make sure to continue to increase your build number even after increasing you version number.
 - This plugin may be updated in the future to handle both the version number and the build number, but since this plugin is built around the in-app update functionality it may take a while.
@@ -42,8 +44,7 @@ compileOptions {
 
 ## Using the plugin ##
 
-- **Cordova**
-The plugin creates the object [**`AppUpdate`**](#example).
+- The plugin creates the object [**`AppUpdate`**](#example).
 
 
 ## Installing the plugin ##
@@ -106,8 +107,7 @@ onDeviceReady: function() {
 
 The MIT License
 
-Copyright (c) 2020 Austen Zeh <developerDawg@gmail.com>
-https://www.linkedin.com/in/austen-zeh-20bb55128/
+Copyright (c) 2020 [Austen Zeh](https://www.linkedin.com/in/austen-zeh-20bb55128/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.15] &mdash; 2020-03-16
+- [Updated] README
+
 ## [0.0.14] &mdash; 2020-03-16
 - [Fixed] Broken links in README
 - [Added] More links in README
