@@ -9,7 +9,7 @@ App Update is simple plugin for iOS and Android which will look for an app updat
 
 This plugin is defined as native because the app information is pulled right from the applicatoion itself using the native OS. Since the app information is gathered by the plugin, there is **no need to provide an appID**. However, because the plugin must make a request to the either of the stores, the app **will need a connection** to make the request, and the update process will have to wait for the success callback to be executed. For more information of this please look below at the examples.
 
-:new: App Update now provides a [__`needsUpdate`__](#needsUpdate) method to check if an update is available in the OS store.
+:new: App Update now provides a [__`needsUpdate`__](#example) method to check if an update is available in the OS store.
 
 ### iOS
 - Currently for iOS devices, the plugin **checks the version number, not the build number**, so if you release multiple builds within the same version, then this plugin will not handle these updates properly. (ex. 1.0.0 != 1.0.1)
@@ -17,7 +17,7 @@ This plugin is defined as native because the app information is pulled right fro
 - [__`needsUpdate`__](#example) will return either true or false when successful.
 
 ### Android
-- The plugin uses Android's [**in-app updates functionality**]() to detect when an update is available
+- The plugin uses Android's [**in-app updates functionality**](https://developer.android.com/guide/playcore/in-app-updates) to detect when an update is available
 - This functionality by default checks the build number and not the version number, so you must make sure to continue to increase your build number even after increasing you version number.
 - This plugin may be updated in the future to handle both the version number and the build number, but since this plugin is built around the in-app update functionality it may take a while.
 - [__`needsUpdate`__](#example) will return either 1 or 0 when successful, which can still evaluate as booleans, so there is no need to handle Android differently from iOS.
@@ -32,7 +32,7 @@ This plugin is defined as native because the app information is pulled right fro
 ### Android
 
 - Add ```implementation 'com.google.android.play:core:1.6.3'``` to your dependencies in your build.gradle file
-- Make sure you are using Java 1.8 or greater. In your build.gradle file look for *compileOptions* and verify your version matches or is greater than what is shown below
+- Make sure you are using Java 1.8 or greater. In your build.gradle file look for *compileOptions* and verify your version matches or is greater than what is shown below:
 ```
 compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
@@ -43,7 +43,7 @@ compileOptions {
 ## Using the plugin ##
 
 - **Cordova**
-The plugin creates the object **`AppUpdate`**.
+The plugin creates the object [**`AppUpdate`**](#example).
 
 
 ## Installing the plugin ##
