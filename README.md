@@ -1,405 +1,113 @@
-cordova-plugin-background-fetch &middot; [![npm](https://img.shields.io/npm/dm/cordova-plugin-background-fetch.svg)]() [![npm](https://img.shields.io/npm/v/cordova-plugin-background-fetch.svg)]()
+cordova-plugin-native-app-update &middot; [![npm](https://img.shields.io/npm/dm/cordova-plugin-native-app-update.svg)]() [![npm](https://img.shields.io/npm/v/cordova-plugin-native-app-update.svg)]()
 ==============================================================================
 
-[![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
-
-By [**Transistor Software**](https://www.transistorsoft.com), creators of [**Cordova Background Geolocation**](http://www.transistorsoft.com/shop/products/cordova-background-geolocation)
+By [**Austen Zeh**](https://www.linkedin.com/in/austen-zeh-20bb55128/)
 
 ------------------------------------------------------------------------------
 
-Background Fetch is a *very* simple plugin for iOS &amp; Android which will awaken an app in the background about **every 15 minutes**, providing a short period of background running-time.  This plugin will execute your provided `callbackFn` whenever a background-fetch event occurs.
+App Update is simple plugin for iOS and Android which will look for an app update through the App Store and Google Play Store respectively. This plugin was *built to assist with the inconsistent review times by both Apple and Google* after rolling out a new release version to production. This may also allow you to rollout a new version release for one OS, but not the other.
 
-There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
+This plugin is defined as native because the app information is pulled right from the applicatoion itself using the native OS. Since the app information is gathered by the plugin, there is **no need to provide an appID**. However, because the plugin must make a request to the either of the stores, the app **will need a connection** to make the request, and the update process will have to wait for the success callback to be executed. For more information of this please look below at the examples.
 
-:new: Background Fetch now provides a [__`scheduleTask`__](#executing-custom-tasks) method for scheduling arbitrary "one-shot" or periodic tasks.
+:new: App Update now provides a [__`needsUpdate`__](#needsUpdate) method to check if an update is available in the OS store.
 
 ### iOS
-- There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
-- [__`scheduleTask`__](#executing-custom-tasks) seems only to fire when the device is plugged into power.
+- Currently for iOS devices, the plugin **checks the version number, not the build number**, so if you release multiple builds within the same version, then this plugin will not handle these updates properly. (ex. 1.0.0 != 1.0.1)
+- This plugin may be updated in the future to handle multiple builds within the same version, but seeing as Apple requires a new version number for new releases this may not be needed at all.
+- [__`needsUpdate`__](#example) will return either true or false when successful.
 
 ### Android
-- The Android plugin provides a [Headless](#config-boolean-enableheadless-false) implementation allowing you to continue handling events even after app terminate.
+- The plugin uses Android's [**in-app updates functionality**]() to detect when an update is available
+- This functionality by default checks the build number and not the version number, so you must make sure to continue to increase your build number even after increasing you version number.
+- This plugin may be updated in the future to handle both the version number and the build number, but since this plugin is built around the in-app update functionality it may take a while.
+- [__`needsUpdate`__](#example) will return either 1 or 0 when successful, which can still evaluate as booleans, so there is no need to handle Android differently from iOS.
 
+
+## Requirements ##
+
+### iOS
+
+- No requirements, the plugin should work after [installing](#installing-the-plugin).
+
+### Android
+
+- Add ```implementation 'com.google.android.play:core:1.6.3'``` to your dependencies in your build.gradle file
+- Make sure you are using Java 1.8 or greater. In your build.gradle file look for *compileOptions* and verify your version matches or is greater than what is shown below
+```
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+```
 
 ## Using the plugin ##
 
-- **Cordova / Ionic 1**
-The plugin creates the object **`window.BackgroundFetch`**.
-
-- With Typescript (eg: Ionic 2+):
-```typescript
-import BackgroundFetch from "cordova-plugin-background-fetch";
-
-```
+- **Cordova**
+The plugin creates the object **`AppUpdate`**.
 
 
 ## Installing the plugin ##
 
 - ### Ionic
-```
-ionic cordova plugin add cordova-plugin-background-fetch
+
+```bash
+ionic cordova plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
 ```
 
 - ### Pure Cordova
 
 ```bash
-cordova plugin add cordova-plugin-background-fetch
+cordova plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
 ```
 
-- ### Capacitor
+- ### PhoneGap CLI
+
 ```bash
-npm install cordova-plugin-background-fetch
-npx cap sync
+phonegap plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
 ```
-:information_source: See [Capacitor Setup](./docs/INSTALL_CAPACITOR.md)
 
 - ### PhoneGap Build
 
 ```xml
-  <plugin name="cordova-plugin-background-fetch" source="npm" />
+<plugin name="cordova-plugin-native-app-update" spec="https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git" />
 ```
 
-## iOS Setup [:new: __iOS 13+__]
-
-If you intend to execute your own [custom tasks](#executing-custom-tasks) via **`BackgroundFetch.scheduleTask`**, for example:
-
-```javascript
-BackgroundFetch.scheduleTask({
-  taskId: 'com.transistorsoft.customtask1',  // <-- Your custom task-identifier
-  delay: 60 * 60 * 1000  //  In one hour (milliseconds)
-});
-.
-.
-.
-BackgroundFetch.scheduleTask({
-  taskId: 'com.transistorsoft.customtask2',  // <-- Your custom task-identifier
-  delay: 60 * 60 * 1000  //  In one hour (milliseconds)
-});
-```
-
-You must register these custom *task-identifiers* with your iOS app's __`Info.plist`__ *"Permitted background task scheduler identifiers"*:
-
-:open_file_folder: In your __`config.xml`__, find the __`<platform name="ios">`__ container and register your custom *task-identifier(s)*:
-```xml
-  <platform name="ios">
-      <config-file parent="BGTaskSchedulerPermittedIdentifiers" target="*-Info.plist">
-          <array>
-              <string>com.transistorsoft.customtask1</string>
-              <string>com.transistorsoft.customtask2</string>
-          </array>
-      </config-file>
-  </platform>
-```
-
-:warning: A task identifier can be any string you wish, but it's a good idea to prefix them now with `com.transistorsoft.` &mdash;  In the future, the `com.transistorsoft` prefix **may become required**.
 
 ## Example ##
 
-### Pure Cordova Javascript (eg: Ionic 1)
+### Pure Cordova Javascript (eg: PhoneGap, Cordova, Ionic 1)
 ```javascript
 onDeviceReady: function() {
-  var BackgroundFetch = window.BackgroundFetch;
-
-  // Your background-fetch handler.
-  var fetchCallback = function(taskId) {
-    console.log('[js] BackgroundFetch event received: ', taskId);
-    // Required: Signal completion of your task to native code
-    // If you fail to do this, the OS can terminate your app
-    // or assign battery-blame for consuming too much background-time
-    BackgroundFetch.finish(taskId);
-  };
-
-  var failureCallback = function(error) {
-    console.log('- BackgroundFetch failed', error);
-  };
-
-  BackgroundFetch.configure(fetchCallback, failureCallback, {
-    minimumFetchInterval: 15 // <-- default is 15
+  AppUpdate.needsUpdate(function(has_update){
+      console.log("Update Available:",has_update);
+  },function(error){
+      console.log("App Update ERROR:",error);
   });
 }
 ```
 
-### Ionic 2+ Example
-```javascript
-import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
 
-import BackgroundFetch from "cordova-plugin-background-fetch";
-
-@Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
-})
-export class HomePage {
-  constructor(public navCtrl: NavController, public platform: Platform) {
-    this.platform.ready().then(this.onDeviceReady.bind(this));
-  }
-
-  onDeviceReady() {
-    // Your background-fetch handler.
-    let fetchCallback = function(taskId) {
-        console.log('[js] BackgroundFetch event received: ', taskId);
-        // Required: Signal completion of your task to native code
-        // If you fail to do this, the OS can terminate your app
-        // or assign battery-blame for consuming too much background-time
-        BackgroundFetch.finish(taskId);
-    };
-
-    let failureCallback = function(error) {
-        console.log('- BackgroundFetch failed', error);
-    };
-
-    BackgroundFetch.configure(fetchCallback, failureCallback, {
-        minimumFetchInterval: 15 // <-- default is 15
-    });
-  }
-}
-```
-
-### Executing Custom Tasks
-
-In addition to the default background-fetch task defined by `BackgroundFetch.configure`, you may also execute your own arbitrary "oneshot" or periodic tasks (iOS requires additional [Setup Instructions](#ios-setup-new-ios-13)).  However, all events will be fired into the Callback provided to **`BackgroundFetch#configure`**:
-
-__:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged into power.  Hopefully Apple changes this in the future.
-
-```javascript
-// Step 1:  Configure BackgroundFetch as usual.
-BackgroundFetch.configure({
-  minimumFetchInterval: 15
-), (taskId) => {
-  // This is the fetch-event callback.
-  console.log("[BackgroundFetch] taskId: ", taskId);
-
-  // Use a switch statement to route task-handling.
-  switch (taskId) {
-    case 'com.transistorsoft.customtask':
-      print("Received custom task");
-      break;
-    default:
-      print("Default fetch task");
-  }
-  // Finish, providing received taskId.
-  BackgroundFetch.finish(taskId);
-});
-
-// Step 2:  Schedule a custom "oneshot" task "com.transistorsoft.customtask" to execute 5000ms from now.
-BackgroundFetch.scheduleTask({
-  taskId: "com.transistorsoft.customtask",
-  forceAlarmManager: true,
-  delay: 5000  // <-- milliseconds
-});
-```
-
-## Config
-
-### Common Options
-
-#### `@param {Integer} minimumFetchInterval [15]`
-
-The minimum interval in **minutes** to execute background fetch events.  Defaults to **`15`** minutes.  **Note**:  Background-fetch events will **never** occur at a frequency higher than **every 15 minutes**.  Apple uses a secret algorithm to adjust the frequency of fetch events, presumably based upon usage patterns of the app.  Fetch events *can* occur less often than your configured `minimumFetchInterval`.
-
-#### `@param {Integer} delay (milliseconds)`
-
-:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  The minimum number of milliseconds in future that task should execute.
-
-#### `@param {Boolean} periodic [false]`
-
-:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  Defaults to `false`.  Set true to execute the task repeatedly.  When `false`, the task will execute **just once**.
-
-### Android Options
-
-#### `@config {Boolean} stopOnTerminate [true]`
-
-Set `false` to continue background-fetch events after user terminates the app.  Default to `true`.
-
-#### `@config {Boolean} startOnBoot [false]`
-
-Set `true` to initiate background-fetch events when the device is rebooted.  Defaults to `false`.
-
-:exclamation: **NOTE:** `startOnBoot` requires `stopOnTerminate: false`.
-
-#### `@config {Boolean} forceAlarmManager [false]`
-
-By default, the plugin will use Android's `JobScheduler` when possible.  The `JobScheduler` API prioritizes for battery-life, throttling task-execution based upon device usage and battery level.
-
-Configuring `forceAlarmManager: true` will bypass `JobScheduler` to use Android's older `AlarmManager` API, resulting in more accurate task-execution at the cost of **higher battery usage**.
-
-```javascript
-BackgroundFetch.configure({
-  minimumFetchInterval: 15,
-  forceAlarmManager: true
-}, async (taskId) => {
-  console.log("[BackgroundFetch] taskId: ", taskId);
-  BackgroundFetch.finish(taskId);
-});
-.
-.
-.
-// And with with #scheduleTask
-BackgroundFetch.scheduleTask({
-  taskId: 'com.transistorsoft.customtask',
-  delay: 5000,       // milliseconds
-  forceAlarmManager: true
-  periodic: false
-});
-```
-
-#### `@config {integer} requiredNetworkType [BackgroundFetch.NETWORK_TYPE_NONE]`
-
-Set basic description of the kind of network your job requires.
-
-If your job doesn't need a network connection, you don't need use this options as the default value is `BackgroundFetch.NETWORK_TYPE_NONE`.
-
-| NetworkType                           | Description                                                         |
-|---------------------------------------|---------------------------------------------------------------------|
-| `BackgroundFetch.NETWORK_TYPE_NONE`     | This job doesn't care about network constraints, either any or none.|
-| `BackgroundFetch.NETWORK_TYPE_ANY`      | This job requires network connectivity.                             |
-| `BackgroundFetch.NETWORK_TYPE_CELLULAR` | This job requires network connectivity that is a cellular network.  |
-| `BackgroundFetch.NETWORK_TYPE_UNMETERED` | This job requires network connectivity that is unmetered.          |
-| `BackgroundFetch.NETWORK_TYPE_NOT_ROAMING` | This job requires network connectivity that is not roaming.      |
-
-#### `@config {Boolean} requiresBatteryNotLow [false]`
-
-Specify that to run this job, the device's battery level must not be low.
-
-This defaults to false. If true, the job will only run when the battery level is not low, which is generally the point where the user is given a "low battery" warning.
-
-#### `@config {Boolean} requiresStorageNotLow [false]`
-
-Specify that to run this job, the device's available storage must not be low.
-
-This defaults to false. If true, the job will only run when the device is not in a low storage state, which is generally the point where the user is given a "low storage" warning.
-
-#### `@config {Boolean} requiresCharging [false]`
-
-Specify that to run this job, the device must be charging (or be a non-battery-powered device connected to permanent power, such as Android TV devices). This defaults to false.
-
-#### `@config {Boolean} requiresDeviceIdle [false]`
-
-When set true, ensure that this job will not run if the device is in active use.
-
-The default state is false: that is, the for the job to be runnable even when someone is interacting with the device.
-
-This state is a loose definition provided by the system. In general, it means that the device is not currently being used interactively, and has not been in use for some time. As such, it is a good time to perform resource heavy jobs. Bear in mind that battery usage will still be attributed to your application, and surfaced to the user in battery stats.
-
-#### `@config {Boolean} enableHeadless [false]`
-
-:warning: **For advanced users only**.  In order to use **`enableHeadless: true`**, you must be prepared to **write Java code**.  If you're not prepared to write Java code, turn away now and do **not** enable this :warning:.
-
-When your application is terminated with **`stopOnTerminate: false`**, your Javascript app (and your Javascript fetch `callback`) *are* terminated.  However, the plugin provides a mechanism for you to handle background-fetch events in the **Native Android Environment**.
-
-Some examples where you could use the "Headless" mechanism:
-- Refreshing API keys.
-- Performing HTTP requests with your server.
-- Posting a local notification
-
-#### Headless Fetch Setup
-
-1. create a new file in your Cordova application named **`BackgroundFetchHeadlessTask.java`.** :warning: The file can be located anywhere in your app but **MUST** be named **`BackgroundFetchHeadlessTask.java`**.
-
-eg: :open_file_folder: **`src/android/BackgroundFetchHeadlessTask.java`**
-```java
-package com.transistorsoft.cordova.backgroundfetch;
-import android.content.Context;
-import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
-import android.util.Log;
-
-public class BackgroundFetchHeadlessTask implements HeadlessTask {
-    @Override
-    public void onFetch(Context context, String taskId) {
-        Log.d(BackgroundFetch.TAG, "My BackgroundFetchHeadlessTask:  onFetch: " + taskId);
-        // Perform your work here.
-
-        // Just as in Javascript callback, you must signal #finish
-        BackgroundFetch.getInstance(context).finish(taskId);
-    }
-}
-```
-
-2.  In your **`config.xml`**, add the following **`<resource-file>`** element to the **`<platform name="android">`**:
-```xml
-<platform name="android">
-    <resource-file src="src/android/BackgroundFetchHeadlessTask.java" target="app/src/main/java/com/transistorsoft/cordova/backgroundfetch/BackgroundFetchHeadlessTask.java" />
-</platform>
-```
-- `src`: path to your custom `BackgroundFetchHeadlessTask.java` file.
-- `target`:  :warning: **Must** be *exactly* as shown above.
-
-This will copy your custom Java source-file into the `cordova-plugin-background-fetch` plugin, effectively overriding the plugin.
-
-:warning: You're responsible for managing your own gradle dependencies.  To import 3rd-party libraries, you'll have to import your own custom `build-extras.gradle` (See "build-extras" [here in the Cordova Android Platform Documentation](https://cordova.apache.org/docs/en/latest/guide/platforms/android/))
-
-## Methods
-
-| Method Name | Arguments | Notes
-|---|---|---|
-| `configure` | `callbackFn`, `failureFn`, `{BackgroundFetchConfig}` | Configures the plugin's fetch `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min).  The `failureFn` will be called if the device doesn't support background-fetch. |
-| `scheduleTask` | `{TaskConfig}` | Executes a custom task.  The task will be executed in the same `Callback` function provided to `#configure`. |
-| `stopTask` | `String taskId`, `successFn`,`failureFn` | Stops a `scheduleTask` from running. |
-| `finish` | `String taskId` | You **MUST** call this method in your `callbackFn` provided to `#configure` in order to signal to the OS that your task is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
-| `start` | `successFn`, `failureFn` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
-| `stop` | `successFn`, `failureFn` | Stop the background-fetch API from firing fetch events.  Your `callbackFn` provided to `#configure` will no longer be executed. |
-| `status` | `callbackFn` | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
-
-
-## Debugging
+## TODO Items
 
 ### iOS
 
-#### :new: `BGTaskScheduler` API for iOS 13+
-
-- :warning: At the time of writing, the new task simulator does not yet work in Simulator; Only real devices.
-- See Apple docs [Starting and Terminating Tasks During Development](https://developer.apple.com/documentation/backgroundtasks/starting_and_terminating_tasks_during_development?language=objc)
-- After running your app in XCode, Click the `[||]` button to initiate a *Breakpoint*.
-- In the console `(lldb)`, paste the following command (**Note:**  use cursor up/down keys to cycle through previously run commands):
-```obj-c
-e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.transistorsoft.fetch"]
-```
-- Click the `[ > ]` button to continue.  The task will execute and the Callback function provided to **`BackgroundFetch.configure`** will receive the event.
-
-
-![](https://dl.dropboxusercontent.com/s/zr7w3g8ivf71u32/ios-simulate-bgtask-pause.png?dl=1)
-
-![](https://dl.dropboxusercontent.com/s/87c9uctr1ka3s1e/ios-simulate-bgtask-paste.png?dl=1)
-
-![](https://dl.dropboxusercontent.com/s/bsv0avap5c2h7ed/ios-simulate-bgtask-play.png?dl=1)
-
-#### Old `BackgroundFetch` API
-- Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`**
-- iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, your can be **sure** that everything is working fine.  You just need to wait.
+- Add functionality to allow update check between build numbers and version numbers
 
 ### Android
 
-- Observe plugin logs in `$ adb logcat`:
-```bash
-$ adb logcat -s TSBackgroundFetch
-```
-- Simulate a background-fetch event on a device (insert *&lt;your.application.id&gt;*) (only works for sdk `24+`):
-```bash
-$ adb shell cmd jobscheduler run -f <your.application.id> 999
-```
-- For devices with sdk `<21`, simulate a "Headless JS" event with (insert *&lt;your.application.id&gt;*)
-```bash
-$ adb shell am broadcast -a <your.application.id>.event.BACKGROUND_FETCH
+- Add functionality to allow update check between build numbers and version numbers
+- Add scripting to automatically include the play core library
+- Add scripting to check and automatically update the users java source to atleast 1.8
+- Add functionality to check if the update is required or flexible
+- Add functionality to allow the update to begin and download right in the app
 
-```
-
-## iOS
-
-Implements [BGTaskScheduler](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc) for devices running iOS 13+ in addition to [performFetchWithCompletionHandler](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplicationDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/UIApplicationDelegate/application:performFetchWithCompletionHandler:) for devices <iOS 13, firing a custom event subscribed-to in cordova plugin.  Unfortunately, iOS automatically ceases background-fetch events when the *user* explicitly terminates the application or reboots the device.
-
-## Android
-
-Android implements background fetch using two different mechanisms, depending on the Android SDK version.  Where the SDK version is `>= LOLLIPOP`, the new [`JobScheduler`](https://developer.android.com/reference/android/app/job/JobScheduler.html) API is used.  Otherwise, the old [`AlarmManager`](https://developer.android.com/reference/android/app/AlarmManager.html) will be used.
-
-Unlike iOS, the Android implementation *can* continue to operate after application terminate (`stopOnTerminate: false`) or device reboot (`startOnBoot: true`).
 
 ## Licence ##
 
 The MIT License
 
-Copyright (c) 2018 Chris Scott, Transistor Software <chris@transistorsoft.com>
-http://transistorsoft.com
+Copyright (c) 2020 Austen Zeh <developerDawg@gmail.com>
+https://www.linkedin.com/in/austen-zeh-20bb55128/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
