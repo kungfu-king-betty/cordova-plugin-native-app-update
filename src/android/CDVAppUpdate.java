@@ -66,7 +66,11 @@ public class CDVAppUpdate extends CordovaPlugin {
                         ignore.printStackTrace(pw);
                         Log.e(TAG, sw.toString());
                         mPluginResult = new PluginResult(PluginResult.Status.ERROR);
-                        mCallbackContext.error(errorResponse.put("message", sw.toString()));
+                        try{
+                            mCallbackContext.error(errorResponse.put("message", sw.toString()));
+                        } catch (JSONException e) {
+                            System.out.println(e);
+                        }
                         mCallbackContext.sendPluginResult(mPluginResult);
                     }
                 }
@@ -110,7 +114,11 @@ public class CDVAppUpdate extends CordovaPlugin {
             Log.e(TAG, sw.toString());
             final JSONObject taskErrorResponse = new JSONObject();
             mPluginResult = new PluginResult(PluginResult.Status.ERROR);
-            mCallbackContext.error(taskErrorResponse.put("message", sw.toString()));
+            try {
+                mCallbackContext.error(taskErrorResponse.put("message", sw.toString()));
+            } catch (JSONException e) {
+                System.out.println(e);
+            }
             mCallbackContext.sendPluginResult(mPluginResult);
         });
     }

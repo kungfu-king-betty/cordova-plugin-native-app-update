@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.1.1] &mdash; 2020-03-17
+- [Fixed] Android source file to be compatible with cordova-android 8.1.0
+
 ## [0.1.0] &mdash; 2020-03-16
 - [Added] npm install to README
 - [Updated] npm package dependencies
