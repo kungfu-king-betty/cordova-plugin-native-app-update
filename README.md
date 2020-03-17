@@ -58,19 +58,19 @@ npm install --save cordova-plugin-native-app-update
 - ### Ionic
 
 ```bash
-ionic cordova plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
+ionic cordova plugin add cordova-plugin-native-app-update
 ```
 
 - ### Pure Cordova
 
 ```bash
-cordova plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
+cordova plugin add cordova-plugin-native-app-update
 ```
 
 - ### PhoneGap CLI
 
 ```bash
-phonegap plugin add https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git
+phonegap plugin add cordova-plugin-native-app-update
 ```
 
 - ### PhoneGap Build
