@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [0.1.0] &mdash; 2020-03-16
+- [Added] npm install to README
+- [Updated] npm package dependencies
+- [Added] Library to npm
+
 ## [0.0.16] &mdash; 2020-03-16
 - [Updated] LICENSE
 

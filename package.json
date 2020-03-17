@@ -1,9 +1,7 @@
 {
   "name": "cordova-plugin-native-app-update",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "description": "A plugin to check the App Store or Google Play Store for iOS and Android respectively.",
-  "types": "./src/typescript/index.d.ts",
- 
   "cordova": {
     "id": "cordova-plugin-native-app-update",
     "platforms": [
@@ -13,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git"
+    "url": "git+https://github.com/kungfu-king-betty/cordova-plugin-native-app-update.git"
   },
   "keywords": [
     "cordova",
@@ -25,7 +23,6 @@
     "url": "https://github.com/kungfu-king-betty/cordova-plugin-native-app-update/issues"
   },
   "homepage": "https://github.com/kungfu-king-betty/cordova-plugin-native-app-update",
-
   "engines": {
     "cordovaDependencies": {
       "<1.0.0": {
@@ -40,5 +37,9 @@
       }
     }
   },
-  "author": "Austen Zeh <developerDawg@gmail.com>"
+  "author": "Austen Zeh <developerDawg@gmail.com>",
+  "main": "./src/typescript/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }

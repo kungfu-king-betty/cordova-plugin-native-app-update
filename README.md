@@ -49,6 +49,12 @@ compileOptions {
 
 ## Installing the plugin ##
 
+- ### NPM
+
+```bash
+npm install --save cordova-plugin-native-app-update
+```
+
 - ### Ionic
 
 ```bash
@@ -103,7 +109,7 @@ onDeviceReady: function() {
 - Add functionality to allow the update to begin and download right in the app
 
 
-## Licence ##
+## License ##
 
 The MIT License
 
