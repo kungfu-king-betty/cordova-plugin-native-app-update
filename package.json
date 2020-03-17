@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-native-app-update",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A plugin to check the App Store or Google Play Store for iOS and Android respectively.",
   "cordova": {
     "id": "cordova-plugin-native-app-update",

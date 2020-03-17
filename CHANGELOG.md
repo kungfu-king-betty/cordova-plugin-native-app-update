@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.2.1] &mdash; 2020-03-17
+- [Updated] build.grable for android plugin
+
 ## [0.2.0] &mdash; 2020-03-17
 - [Added] Declaration to the android sources to automatically add the nessecary implentation of the Google Play Store core library
 - [Added] Declaration of Java 1.8 during the plugin install, so the user is no longer required to input this themseleves
