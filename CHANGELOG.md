@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.16] &mdash; 2020-03-16
+- [Updated] LICENSE
+
 ## [0.0.15] &mdash; 2020-03-16
 - [Updated] README
 
