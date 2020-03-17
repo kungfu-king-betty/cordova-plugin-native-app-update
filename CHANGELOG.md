@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.11] &mdash; 2020-03-16
+- [Fixed] The iOS source file to create the object name properly
+
 ## [0.0.10] &mdash; 2020-03-16
 - [Fixed] The error handler in the android source file to print the stack trace of the error
 

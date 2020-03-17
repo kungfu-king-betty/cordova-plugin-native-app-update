@@ -8,7 +8,7 @@
 
 static NSString *const TAG = @"CDVAppUpdate";
 
-@implementation CDVAppUpdate
+@implementation AppUpdate
 
 -(BOOL) needsUpdate:(CDVInvokedUrlCommand*)command
 {
