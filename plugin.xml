@@ -3,8 +3,8 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-native-app-update"
-    version="0.0.11">
-    <name>CDVAppUpdate</name>
+    version="0.0.12">
+    <name>AppUpdate</name>
     <description>Cordova Native App Update Plugin</description>
     <license>MIT</license>
     <repo>https://github.com/kungfu-king-betty/cordova-plugin-native-app-update</repo>
@@ -24,7 +24,7 @@
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="AppUpdate">
-                <param name="ios-package" value="CDVBackgroundFetch"/>
+                <param name="ios-package" value="CDVAppUpdate"/>
                 <param name="onload" value="true"/>
             </feature>
         </config-file>

@@ -5,7 +5,7 @@
 #import <Cordova/CDVPlugin.h>
 #import "AppDelegate.h"
 
-@interface AppUpdate : CDVPlugin {}
+@interface CDVAppUpdate : CDVPlugin
 
 - (BOOL) needsUpdate:(CDVInvokedUrlCommand*)command;
 

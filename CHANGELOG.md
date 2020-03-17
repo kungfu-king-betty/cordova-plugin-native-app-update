@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.0.12] &mdash; 2020-03-16
+- [Fixed] The plugin declaration for iOS
+
 ## [0.0.11] &mdash; 2020-03-16
 - [Fixed] The iOS source file to create the object name properly
 

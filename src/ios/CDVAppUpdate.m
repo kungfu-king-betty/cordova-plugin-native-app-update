@@ -4,11 +4,12 @@
 //  Created by Austen Zeh <developerDawg@gmail.com> on 2020-03-16
 //
 #import "CDVAppUpdate.h"
-#import "AppDelegate.h"
+#import <objc/runtime.h>
+#import <Cordova/CDVViewController.h>
 
 static NSString *const TAG = @"CDVAppUpdate";
 
-@implementation AppUpdate
+@implementation CDVAppUpdate
 
 -(BOOL) needsUpdate:(CDVInvokedUrlCommand*)command
 {
