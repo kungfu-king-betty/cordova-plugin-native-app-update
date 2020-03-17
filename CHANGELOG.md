@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [0.2.0] &mdash; 2020-03-17
+- [Added] Declaration to the android sources to automatically add the nessecary implentation of the Google Play Store core library
+- [Added] Declaration of Java 1.8 during the plugin install, so the user is no longer required to input this themseleves
+- [Removed] Requirements from README for android
+
 ## [0.1.1] &mdash; 2020-03-17
 - [Fixed] Android source file to be compatible with cordova-android 8.1.0
 

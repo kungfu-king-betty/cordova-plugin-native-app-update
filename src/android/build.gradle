@@ -1,0 +1,13 @@
+def NAME = "cordova-plugin-native-app-update"
+
+dependencies {
+    // Load the google play core
+    implementation "com.google.android.play:core:1.6.5"
+}
+
+android {
+	compileOptions {
+	    sourceCompatibility JavaVersion.VERSION_1_8
+	    targetCompatibility JavaVersion.VERSION_1_8
+	}
+}

@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-native-app-update"
-    version="0.1.1">
+    version="0.2.0">
     <name>AppUpdate</name>
     <description>Cordova Native App Update Plugin</description>
     <license>MIT</license>
@@ -36,6 +36,7 @@
     <platform name="android">
         <source-file src="src/android/CDVAppUpdate.java" target-dir="src/com/apache/cordova/appupdate" />
 
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AppUpdate">
                 <param name="android-package" value="com.kungfukingbetty.cordova.appupdate.CDVAppUpdate"/>
