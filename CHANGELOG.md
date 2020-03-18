@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.3.1] &mdash; 2020-03-18
+- [Fixed] Version requirement during Android installation
+
 ## [0.3.0] &mdash; 2020-03-18
 - [Added] Functionality to allow the user to supply an api url to check for a forced update for iOS and Android
 
