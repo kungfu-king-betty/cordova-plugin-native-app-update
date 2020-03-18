@@ -24,6 +24,13 @@ import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.UpdateAvailability;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class CDVAppUpdate extends CordovaPlugin {
 
     public static final String TAG = "NativeAppUpdate";
@@ -59,7 +66,7 @@ public class CDVAppUpdate extends CordovaPlugin {
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     try {
-                        needsUpdate();
+                        needsUpdate(args.getString(0), args.getString(1));
                     } catch (Exception ignore) {
                         StringWriter sw = new StringWriter();
                         PrintWriter pw = new PrintWriter(sw);
@@ -81,7 +88,7 @@ public class CDVAppUpdate extends CordovaPlugin {
         return false;
     }
 
-    private void needsUpdate() throws JSONException {
+    private void needsUpdate(final String force_api, final String force_key) throws JSONException {
         // Get the app context
         Context this_ctx = (Context) this.cordova.getActivity();
         // Creates instance of the manager.
@@ -94,6 +101,30 @@ public class CDVAppUpdate extends CordovaPlugin {
         appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
             int update_avail = 0;
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                try {
+                    URL obj = new URL(force_api);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                    con.setRequestMethod("GET");
+                    int responseCode = con.getResponseCode();
+                    System.out.println("GET Response Code :: " + responseCode);
+                    if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        String inputLine;
+                        StringBuffer response = new StringBuffer();
+
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        // print result
+                        System.out.println(response.toString());
+                    } else {
+                        System.out.println("GET request not worked");
+                    }
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
                 update_avail = 1;
             }
                   // For a flexible update, use AppUpdateType.FLEXIBLE
