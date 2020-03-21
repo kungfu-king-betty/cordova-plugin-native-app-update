@@ -24,6 +24,7 @@ static NSString *const TAG = @"CDVAppUpdate";
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?bundleId=%@", appID]];
     NSData* data = [NSData dataWithContentsOfURL:url];
     NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSMutableDictionary *resultObj = [[NSMutableDictionary alloc]initWithCapacity:10];
     BOOL update_avail = NO;
     BOOL update_force = NO;
 
@@ -47,17 +48,19 @@ static NSString *const TAG = @"CDVAppUpdate";
                     NSData* force_data = [NSData dataWithContentsOfURL:force_url];
                     NSDictionary* force_lookup = [NSJSONSerialization JSONObjectWithData:force_data options:0 error:nil];
                     update_force = [force_lookup objectForKey:force_key];
+                    for (id key in force_lookup) {
+                        [resultObj setObject:[force_lookup objectForKey:key] forKey:key];
+                    }
                 }
-                NSLog(@"%@ Force Update: %@", TAG, update_force);
+                NSLog(@"%@ Force Update: %i", TAG, update_force);
                 update_avail = YES;
                 break;
             }
         }
     }
 
-    NSMutableDictionary *resultObj = [[NSMutableDictionary alloc]initWithCapacity:2];
+    
     [resultObj setObject:[NSNumber numberWithBool:update_avail] forKey:@"update_available"];
-    [resultObj setObject:[NSNumber numberWithBool:update_force] forKey:@"update_forced"];
 
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultObj];
     [result setKeepCallbackAsBool:YES];
