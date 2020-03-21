@@ -9,7 +9,10 @@ App Update is simple plugin for iOS and Android which will look for an app updat
 
 This plugin is defined as native because the app information is pulled right from the applicatoion itself using the native OS. Since the app information is gathered by the plugin, there is **no need to provide an appID**. However, because the plugin must make a request to the either of the stores, the app **will need a connection** to make the request, and the update process will have to wait for the success callback to be executed. For more information of this please look below at the examples.
 
-:new: App Update now provides a [__`needsUpdate`__](#example) method to check if an update is available in the OS store.
+App Update now provides a [__`needsUpdate`__](#example) method to check if an update is available in the OS store.
+
+:new: Functionality has been added that allows you to provide an api url to **check for a forced update.** This api should be set up on your app server and should return a JSON object. The JSON object that is returned in the api response is appended to the object returned by the plugin so you will have access to more than just the update_available and force_update flags.
+
 
 ### iOS
 
@@ -19,10 +22,9 @@ This plugin is defined as native because the app information is pulled right fro
 
 ### Android
 
-- The plugin uses Android's [**in-app updates functionality**](https://developer.android.com/guide/playcore/in-app-updates) to detect when an update is available
-- This functionality by default checks the build number and not the version number, so you must make sure to continue to increase your build number even after increasing you version number.
-- This plugin may be updated in the future to handle both the version number and the build number, but since this plugin is built around the in-app update functionality it may take a while.
-- [__`needsUpdate`__](#example) will return either 1 or 0 when successful, which can still evaluate as booleans, so there is no need to handle Android differently from iOS.
+- This checks the app version number just like iOS, so only different version numbers are detected. (ex. 1.0.0 != 1.0.1)
+- This plugin may be updated in the future to handle both the version number and the build number.
+- [__`needsUpdate`__](#example) will return either 1 or 0 when successful, which can still evaluate to a boolean, so there is no need to handle Android differently from iOS.
 
 
 ## Requirements ##
@@ -33,15 +35,7 @@ This plugin is defined as native because the app information is pulled right fro
 
 ### Android
 
-- This plugin only works for devices that target API 21 or higher
-- This plugin does not work with device emulators, only real devices that have a google account logged in through the Google Play Store.
-- Make sure you are using Java 1.8 or greater. In your build.gradle file look for *compileOptions* and verify your version matches or is greater than what is shown below:
-```
-compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-}
-```
+- All Android requirements are handled after [installing the plugin](#installing-the-plugin).
 
 ## Using the plugin ##
 
@@ -91,6 +85,14 @@ onDeviceReady: function() {
   },function(error){
       console.log("App Update ERROR:",error);
   });
+
+  AppUpdate.needsUpdate(function(appUpdateObj) {
+      if(appUpdateObj.update_available == 1) {
+        // show app update dialog
+      }
+  }, function(error){
+      console.log("App Update ERROR:",error);
+  }, api_url_for_force_update , force_update_object_key);
 }
 ```
 
@@ -104,10 +106,7 @@ onDeviceReady: function() {
 ### Android
 
 - Add functionality to allow update check between build numbers and version numbers
-- Add scripting to automatically include the play core library
-- Add scripting to check and automatically update the users java source to atleast 1.8
-- Add functionality to check if the update is required or flexible
-- Add functionality to allow the update to begin and download right in the app
+- Possibly updated the plugin to use Android's [**in-app updates functionality**](https://developer.android.com/guide/playcore/in-app-updates) to detect when an update is available
 
 
 ## License ##
