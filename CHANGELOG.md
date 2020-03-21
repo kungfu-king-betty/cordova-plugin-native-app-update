@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.4.1] &mdash; 2020-03-21
+- [Updated] README
+
 ## [0.4.0] &mdash; 2020-03-21
 - [Fixed] The Android source file to work for all android devices that use Google Play Services
 - [Updated] The Android build file to include the nessecary build requirements 
