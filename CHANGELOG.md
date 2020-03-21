@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.0] &mdash; 2020-03-21
+- [Removed] In-app updates check for Android so the plugin works on all Android devices
+- [Added] Functionality to allow the user to check for if the updated is forced by adding a custom api call
+
 ## [0.4.1] &mdash; 2020-03-21
 - [Updated] README
 
