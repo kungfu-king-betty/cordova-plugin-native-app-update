@@ -80,11 +80,6 @@ phonegap plugin add cordova-plugin-native-app-update
 ### Pure Cordova Javascript (eg: PhoneGap, Cordova, Ionic 1)
 ```javascript
 onDeviceReady: function() {
-  AppUpdate.needsUpdate(function(has_update){
-      console.log("Update Available:",has_update);
-  },function(error){
-      console.log("App Update ERROR:",error);
-  });
 
   AppUpdate.needsUpdate(function(appUpdateObj) {
       if(appUpdateObj.update_available == 1) {
@@ -92,6 +87,7 @@ onDeviceReady: function() {
       }
   }, function(error){
       console.log("App Update ERROR:",error);
+      // api url and key are not required
   }, api_url_for_force_update , force_update_object_key);
 }
 ```
