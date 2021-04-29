@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.2] &mdash; 2021-04-28
+- [Updated] Android play core implememtation in build.gradle
+
 ## [1.0.1] &mdash; 2020-03-21
 - [Updated] README
 
