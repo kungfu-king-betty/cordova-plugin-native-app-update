@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.3] &mdash; 2021-05-14
+- [Fixed] Non-void function does not return a value in ios strict builds
+
 ## [1.0.2] &mdash; 2021-04-28
 - [Updated] Android play core implememtation in build.gradle
 

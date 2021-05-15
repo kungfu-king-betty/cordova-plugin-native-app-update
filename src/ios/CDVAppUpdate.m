@@ -11,7 +11,7 @@ static NSString *const TAG = @"CDVAppUpdate";
 
 @implementation CDVAppUpdate
 
--(BOOL) needsUpdate:(CDVInvokedUrlCommand*)command
+-(void) needsUpdate:(CDVInvokedUrlCommand*)command
 {
     NSDictionary* infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString* appID = infoDictionary[@"CFBundleIdentifier"];

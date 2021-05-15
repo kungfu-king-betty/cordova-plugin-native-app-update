@@ -7,7 +7,7 @@
 
 @interface CDVAppUpdate : CDVPlugin
 
-- (BOOL) needsUpdate:(CDVInvokedUrlCommand*)command;
+- (void) needsUpdate:(CDVInvokedUrlCommand*)command;
 
 @end
 
