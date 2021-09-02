@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-native-app-update",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "A plugin to check the App Store or Google Play Store for iOS and Android respectively.",
   "cordova": {
     "id": "cordova-plugin-native-app-update",
@@ -38,7 +38,7 @@
     }
   },
   "author": "Austen Zeh <developerDawg@gmail.com>",
-  "main": "./src/typescript/index.js",
+  "main": "src/scripts/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }

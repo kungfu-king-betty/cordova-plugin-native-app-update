@@ -25,13 +25,20 @@ var exec = require("cordova/exec");
 var EMPTY_FN = function() {}
 
 var AppUpdate = {
-    needsUpdate: function(success, failure, force_api=null, force_key=null) {
-        // if (typeof(taskId) !== 'string') {
-        //     throw "AppUpdate.needsUpdate now requires an appId string as the first argument";
-        // }
+    /**
+     * The method used to execute and check for an app update using the AppUpdate plugin
+     *
+     * @param success {Function} - the success callback function that will be called when the plugin executes successfully
+     * @param failure {Function} - the error callback function that will be called when the plugin fails to execute
+     * @param force_api_url {String=""} - an api endpoint to call when checking the app update type for a forced update
+     * @param force_api_response_key {String=""} - the key returned from the api containing the app update type value
+     */
+    needsUpdate: function(success, failure, force_api_url, force_api_response_key) {
         success = success || EMPTY_FN;
         failure = failure || EMPTY_FN;
-        exec(success, failure, "AppUpdate", "needsUpdate",[force_api,force_key]);
+        force_api_url = force_api_url || "";
+        force_api_response_key = force_api_response_key || "";
+        exec(success, failure, "AppUpdate", "needsUpdate", [force_api_url, force_api_response_key]);
     }
 };
 

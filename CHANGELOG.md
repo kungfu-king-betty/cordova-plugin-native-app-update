@@ -1,10 +1,17 @@
 # CHANGELOG
 
+## [2.0.0] &mdash; 2021-09-01
+- [Added] Functionality to use In-App Updates Library for Android
+- [Added] Helpful JSDoc style comments for the plugin and methods
+- [Updated] Library used for making api requests for Android
+- [Updated] README
+- [Updated] ISSUE_TEMPLATE
+
 ## [1.0.3] &mdash; 2021-05-14
 - [Fixed] Non-void function does not return a value in ios strict builds
 
 ## [1.0.2] &mdash; 2021-04-28
-- [Updated] Android play core implememtation in build.gradle
+- [Updated] Android play core implementation in build.gradle
 
 ## [1.0.1] &mdash; 2020-03-21
 - [Updated] README
@@ -18,8 +25,8 @@
 
 ## [0.4.0] &mdash; 2020-03-21
 - [Fixed] The Android source file to work for all android devices that use Google Play Services
-- [Updated] The Android build file to include the nessecary build requirements 
-- [Updated] The Android build file to remove unnessecary requirements
+- [Updated] The Android build file to include the necessary build requirements 
+- [Updated] The Android build file to remove unnecessary requirements
 - [Updated] The README to indicate the correct Android requirements and processing
 
 ## [0.3.1] &mdash; 2020-03-18
@@ -35,8 +42,8 @@
 - [Updated] build.grable for android plugin
 
 ## [0.2.0] &mdash; 2020-03-17
-- [Added] Declaration to the android sources to automatically add the nessecary implentation of the Google Play Store core library
-- [Added] Declaration of Java 1.8 during the plugin install, so the user is no longer required to input this themseleves
+- [Added] Declaration to the android sources to automatically add the necessary implementation of the Google Play Store core library
+- [Added] Declaration of Java 1.8 during the plugin install, so the user is no longer required to input this themselves
 - [Removed] Requirements from README for android
 
 ## [0.1.1] &mdash; 2020-03-17
@@ -78,7 +85,7 @@
 - [Fixed] The package name used in the plugin declaration that was causing an error during the class initialization
 
 ## [0.0.6] &mdash; 2020-03-16
-- [Fixed] Multiple issues with the method call in the android source file which rsulted in undefined being returned
+- [Fixed] Multiple issues with the method call in the android source file which resulted in undefined being returned
 - [Added] Error handler to the android source file
 
 ## [0.0.3] &mdash; 2020-03-16
