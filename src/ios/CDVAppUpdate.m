@@ -17,11 +17,17 @@ static NSString *const TAG = @"CDVAppUpdate";
     NSString* appID = infoDictionary[@"CFBundleIdentifier"];
     NSString* force_api = nil;
     NSString* force_key = nil;
+    NSString* country = @"";
     if ([command.arguments count] > 0) {
         force_api = [command.arguments objectAtIndex:0];
         force_key = [command.arguments objectAtIndex:1];
+        
+        NSString* argCountry = [command.arguments objectAtIndex:2];
+        if ([argCountry length] > 0) {
+            country = [NSString stringWithFormat:@"/%@", argCountry];
+        }
     }
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?bundleId=%@", appID]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"https://itunes.apple.com%@/lookup?bundleId=%@", country, appID]];
     NSData* data = [NSData dataWithContentsOfURL:url];
     NSDictionary* lookup = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     NSMutableDictionary *resultObj = [[NSMutableDictionary alloc]initWithCapacity:10];
